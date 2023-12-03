@@ -25,7 +25,7 @@ public class Util {
 
     public static void delay(int tempo){
         try {
-            Thread.sleep(1);
+            Thread.sleep(tempo);
         } catch (InterruptedException e) {
             System.out.println("Ops, parece que aconteceu um problema com a Tele Sena!");
         }

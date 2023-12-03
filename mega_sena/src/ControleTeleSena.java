@@ -62,7 +62,7 @@ public class ControleTeleSena {
         return false;
     }
 
-    public Ganhador[] realizarSorteio(){
+    public void realizarSorteio(){
         Ganhador[] ganhadores = new Ganhador[VariaveisGlobais.quantidadeMaximaPessoasSorteio];
         int quantidadeGanhadores = 0;
 
@@ -92,7 +92,7 @@ public class ControleTeleSena {
         if(quantidadeGanhadores != 0){
             distribuiPremio(ganhadores);
             obtemInfosTeleSena(ganhadores, quantidadeGanhadores);
-            return ganhadores;
+            return;
         }
 
         for (int i = VariaveisGlobais.quantidadeNumerosTeleSena; i < VariaveisGlobais.maiorNumeroSorteado; i++){
@@ -114,15 +114,11 @@ public class ControleTeleSena {
                 if(quantidadeGanhadores != 0){
                     distribuiPremio(ganhadores);
                     obtemInfosTeleSena(ganhadores, quantidadeGanhadores);
-                    return ganhadores;
+                    return;
                 }
             }else
                 i--;
         }
-
-        distribuiPremio(ganhadores);
-        obtemInfosTeleSena(ganhadores, quantidadeGanhadores);
-        return ganhadores;
     }
 
     private double calculaValorTotalVenda(){
@@ -172,10 +168,10 @@ public class ControleTeleSena {
         System.out.printf("\nLucro obtido: R$ %.2f", (calculaValorTotalVenda() * 0.2));
         System.out.println("\nQuantidade de ganhadores: " + quantidadeGanhadores);
 
-        System.out.println("\nGanhadores:");
+        System.out.print("\nGanhadores:");
         for(int i = 0; i < ganhadores.length; i++){
             if(ganhadores[i] != null)
-                System.out.printf(ganhadores[i].getPessoa().getNome() + " - Tele Senas premiadas: " + ganhadores[i].getQuantidadeVitorias() + " - Valor do prêmio: R$ %.2f", ganhadores[i].getPessoa().getValorPremiado());
+                System.out.printf("\n" + ganhadores[i].getPessoa().getNome() + " - Tele Senas premiadas: " + ganhadores[i].getQuantidadeVitorias() + " - Valor do prêmio: R$ %.2f", ganhadores[i].getPessoa().getValorPremiado());
         }
     }
 
