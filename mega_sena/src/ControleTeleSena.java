@@ -66,11 +66,17 @@ public class ControleTeleSena {
         Ganhador[] ganhadores = new Ganhador[VariaveisGlobais.quantidadeMaximaPessoasSorteio];
         int quantidadeGanhadores = 0;
 
+        System.out.println("Bem-vindos ao sorteio da Tele Sena!");
+        System.out.println("Números sorteados:");
+
         for (int i = 0; i < VariaveisGlobais.quantidadeNumerosTeleSena; i++) {
             int numeroSorteado = Util.sorteiaNumero();
 
-            if(!Util.verificaNumeroExiste(numerosSorteados, numeroSorteado))
+            if(!Util.verificaNumeroExiste(numerosSorteados, numeroSorteado)){
                 numerosSorteados[i] = numeroSorteado;
+                Util.delay(300);
+                System.out.print(numeroSorteado + "  ");
+            }
             else
                 i--;
         }
@@ -79,15 +85,13 @@ public class ControleTeleSena {
 
         for(int i = 0; i < ganhadores.length; i++){
             if(ganhadores[i] != null){
-                System.out.println("Vencedor de primeira.");
                 quantidadeGanhadores++;
             }
         }
 
-        System.out.println("Números sorteados: " + Util.conjuntoToString(numerosSorteados));
-        System.out.println("Ganhadores: " + quantidadeGanhadores);
-
         if(quantidadeGanhadores != 0){
+            distribuiPremio(ganhadores);
+            obtemInfosTeleSena(ganhadores, quantidadeGanhadores);
             return ganhadores;
         }
 
@@ -95,23 +99,84 @@ public class ControleTeleSena {
             int numeroSorteado = Util.sorteiaNumero();
 
             if(!Util.verificaNumeroExiste(numerosSorteados, numeroSorteado)) {
+                Util.delay(300);
+                System.out.print(numeroSorteado + "  ");
+
                 numerosSorteados[i] = numeroSorteado;
                 ganhadores = verificaGanhadores();
+
                 for(int j = 0; j < ganhadores.length; j++){
                     if(ganhadores[j] != null){
-                        System.out.println("Vencedor.");
                         quantidadeGanhadores++;
                     }
                 }
-                System.out.println("Números sorteados: " + Util.conjuntoToString(numerosSorteados));
-                System.out.println("Ganhadores: " + quantidadeGanhadores);
-                if(quantidadeGanhadores != 0)
+
+                if(quantidadeGanhadores != 0){
+                    distribuiPremio(ganhadores);
+                    obtemInfosTeleSena(ganhadores, quantidadeGanhadores);
                     return ganhadores;
+                }
             }else
                 i--;
         }
 
+        distribuiPremio(ganhadores);
+        obtemInfosTeleSena(ganhadores, quantidadeGanhadores);
         return ganhadores;
+    }
+
+    private double calculaValorTotalVenda(){
+        return ((double) quantidadeTeleSenasVendidas()) * 10.00;
+    }
+
+    private void distribuiPremio(Ganhador[] ganhadores){
+        double valorTotalDistribuir = calculaValorTotalVenda() * 0.8;
+        int quantidadeTeleSenasPremiadas = 0;
+
+        for(int i = 0; i < ganhadores.length; i++){
+            if(ganhadores[i] != null){
+                quantidadeTeleSenasPremiadas += ganhadores[i].getQuantidadeVitorias();
+            }
+        }
+
+        double premioPorTeleSena = valorTotalDistribuir / quantidadeTeleSenasPremiadas;
+
+        for(int i = 0; i < ganhadores.length; i++){
+            if(ganhadores[i] != null){
+                ganhadores[i].getPessoa().setValorPremiado(premioPorTeleSena * ganhadores[i].getQuantidadeVitorias());
+            }
+        }
+    }
+
+    private int quantidadeTeleSenasVendidas(){
+        int quantidadeTeleSenasVendidas = 0;
+
+        for(int i = 0; i < pessoas.length; i++){
+            if(pessoas[i] != null){
+                for(int j = 0; j < pessoas[i].getTeleSenas().length; j++){
+                    if(pessoas[i].getTeleSenas()[j] != null){
+                        quantidadeTeleSenasVendidas++;
+                    }
+                }
+            }
+        }
+
+        return quantidadeTeleSenasVendidas;
+    }
+
+    public void obtemInfosTeleSena(Ganhador[] ganhadores, int quantidadeGanhadores){
+        System.out.println("\n\nInformações sobre o sorteio:");
+        System.out.println("Números sorteados: " + Util.conjuntoToString(numerosSorteados));
+        System.out.println("Quantidade de tele senas vendidas: " + quantidadeTeleSenasVendidas());
+        System.out.printf("Valor total de vendas: R$ %.2f", calculaValorTotalVenda());
+        System.out.printf("\nLucro obtido: R$ %.2f", (calculaValorTotalVenda() * 0.2));
+        System.out.println("\nQuantidade de ganhadores: " + quantidadeGanhadores);
+
+        System.out.println("\nGanhadores:");
+        for(int i = 0; i < ganhadores.length; i++){
+            if(ganhadores[i] != null)
+                System.out.printf(ganhadores[i].getPessoa().getNome() + " - Tele Senas premiadas: " + ganhadores[i].getQuantidadeVitorias() + " - Valor do prêmio: R$ %.2f", ganhadores[i].getPessoa().getValorPremiado());
+        }
     }
 
     private Ganhador[] verificaGanhadores(){
@@ -135,8 +200,6 @@ public class ControleTeleSena {
                             if(Util.verificaNumeroExiste(numerosSorteados, numeros2[k]))
                                 acertos2++;
                         }
-
-                        System.out.println("Numero de acertos: " + acertos1 + " e " + acertos2);
 
                         if(acertos1 == VariaveisGlobais.quantidadeNumerosTeleSena || acertos2 == VariaveisGlobais.quantidadeNumerosTeleSena){
                             boolean ganhadorInserido = false;

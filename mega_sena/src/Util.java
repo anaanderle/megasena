@@ -22,4 +22,12 @@ public class Util {
 
         return retorno;
     }
+
+    public static void delay(int tempo){
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            System.out.println("Ops, parece que aconteceu um problema com a Tele Sena!");
+        }
+    }
 }

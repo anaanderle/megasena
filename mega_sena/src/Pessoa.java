@@ -19,16 +19,20 @@ public class Pessoa {
         return nome;
     }
 
+    public double getValorPremiado() {
+        return valorPremiado;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public TeleSena[] getTeleSenas() {
-        return teleSenas;
+    public void setValorPremiado(double valorPremiado) {
+        this.valorPremiado = valorPremiado;
     }
 
-    public double getValorPremiado() {
-        return valorPremiado;
+    public TeleSena[] getTeleSenas() {
+        return teleSenas;
     }
 
     public boolean comprarTelesena(TeleSena teleSena){

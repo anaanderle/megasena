@@ -7,6 +7,7 @@ public class Main {
         ControleTeleSena controleTeleSena = new ControleTeleSena();
         controleTeleSena.inserirPessoa(pessoa);
         controleTeleSena.comprarTeleSena(pessoa);
-        controleTeleSena.realizarSorteio();
+        controleTeleSena.comprarTeleSena(pessoa);
+        Ganhador[] ganhadores = controleTeleSena.realizarSorteio();
     }
 }
